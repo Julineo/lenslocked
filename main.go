@@ -19,6 +19,7 @@ func contact(w http.ResponseWriter, r *http.Request) {
 
 func custom404(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusNotFound)
 	fmt.Fprint(w, "custom 404 not found")
 }
 
