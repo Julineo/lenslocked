@@ -37,12 +37,20 @@ func faqHandler(w http.ResponseWriter, r *http.Request) {
 </ul>
 	`)
 }
+// add galleries handler
+func galleriesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprintf(w, "<h1>Galleries Page</h1>")
+	idHere := chi.URLParam(r, "id")
+	w.Write([]byte(fmt.Sprintf("Galleries: %s", idHere)))
+}
 
 func main() {
 	r := chi.NewRouter()
 	r.Get("/", homeHandler)
 	r.Get("/contact", contactHandler)
 	r.Get("/faq", faqHandler)
+	r.Get("/galleries/{id}", galleriesHandler)
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.NotFoundHandler().ServeHTTP(w, r)
 	})
