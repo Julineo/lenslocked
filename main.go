@@ -2,16 +2,26 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
+	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	bio := `<script>alert("You've been pwned")</script>`
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "<h1>Awesome Site!!!</h1><p>Bio:" + bio + "</p>")
+	tplPath := filepath.Join("templates", "home.gohtml")
+	tpl, err := template.ParseFiles(tplPath)
+	if err != nil {
+		http.Error(w, "Parsing template Error: " + err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := tpl.Execute(w, nil); err != nil {
+		http.Error(w, "Executing template Error: " + err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
